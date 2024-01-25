@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+  <inherits name="com.google.gwt.user.User" />
+  <inherits name="com.google.gwt.user.theme.clean.Clean" />
+  <inherits name="com.google.gwt.editor.Editor" />
+
+  <source path="" />
+
+  <entry-point class="com.mycompany.mywebapp.Contacts" />
+
+  <!-- Only support recent browsers -->
+  <set-property name="user.agent" value="gecko1_8,safari" />
+</module>
