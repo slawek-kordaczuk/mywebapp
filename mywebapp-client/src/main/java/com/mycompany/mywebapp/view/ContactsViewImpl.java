@@ -13,6 +13,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.mycompany.mywebapp.common.ColumnDefinition;
+import com.mycompany.mywebapp.contracts.ContactDetails;
+import com.mycompany.mywebapp.place.EditContactPlace;
 
 import java.util.List;
 
@@ -22,8 +24,10 @@ public class ContactsViewImpl<T> extends Composite implements ContactsView<T> {
     interface ContactsViewUiBinder extends UiBinder<Widget, ContactsViewImpl> {
     }
 
-    private static ContactsViewUiBinder uiBinder =
+    private static final ContactsViewUiBinder uiBinder =
             GWT.create(ContactsViewUiBinder.class);
+
+    private String name;
 
     @UiField
     HTML contactsTable;
@@ -32,7 +36,7 @@ public class ContactsViewImpl<T> extends Composite implements ContactsView<T> {
     @UiField
     Button deleteButton;
 
-    private Presenter<T> presenter;
+    private Presenter<T> activity;
     private List<ColumnDefinition<T>> columnDefinitions;
     private List<T> rowData;
 
@@ -40,8 +44,13 @@ public class ContactsViewImpl<T> extends Composite implements ContactsView<T> {
         initWidget(uiBinder.createAndBindUi(this));
     }
 
-    public void setPresenter(Presenter<T> presenter) {
-        this.presenter = presenter;
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setActivity(Presenter<T> activity) {
+        this.activity = activity;
     }
 
     public void setColumnDefinitions(
@@ -79,15 +88,15 @@ public class ContactsViewImpl<T> extends Composite implements ContactsView<T> {
 
     @UiHandler("addButton")
     void onAddButtonClicked(ClickEvent event) {
-        if (presenter != null) {
-            presenter.onAddButtonClicked();
+        if (activity != null) {
+            activity.goTo(new EditContactPlace(name));
         }
     }
 
     @UiHandler("deleteButton")
     void onDeleteButtonClicked(ClickEvent event) {
-        if (presenter != null) {
-            presenter.onDeleteButtonClicked();
+        if (activity != null) {
+            activity.onDeleteButtonClicked();
         }
     }
 
@@ -109,7 +118,7 @@ public class ContactsViewImpl<T> extends Composite implements ContactsView<T> {
 
     @UiHandler("contactsTable")
     void onTableClicked(ClickEvent event) {
-        if (presenter != null) {
+        if (activity != null) {
             EventTarget target = event.getNativeEvent().getEventTarget();
             Node node = Node.as(target);
             TableCellElement cell = findNearestParentCell(node);
@@ -121,44 +130,44 @@ public class ContactsViewImpl<T> extends Composite implements ContactsView<T> {
             int row = tr.getSectionRowIndex();
 
             if (cell != null) {
-                if (shouldFireClickEvent(cell)) {
-                    presenter.onItemClicked(rowData.get(row));
+                if (shouldEditItem(cell)) {
+                    activity.goTo(new EditContactPlace(name, (ContactDetails) rowData.get(row)));
                 }
-                if (shouldFireSelectEvent(cell)) {
-                    presenter.onItemSelected(rowData.get(row));
+                if (shouldSelectItem(cell)) {
+                    activity.onItemSelected(rowData.get(row));
                 }
             }
         }
     }
 
-    private boolean shouldFireClickEvent(TableCellElement cell) {
-        boolean shouldFireClickEvent = false;
+    private boolean shouldEditItem(TableCellElement cell) {
+        boolean shouldEditItem = false;
 
         if (cell != null) {
             ColumnDefinition<T> columnDefinition =
                     columnDefinitions.get(cell.getCellIndex());
 
             if (columnDefinition != null) {
-                shouldFireClickEvent = columnDefinition.isClickable();
+                shouldEditItem = columnDefinition.isClickable();
             }
         }
 
-        return shouldFireClickEvent;
+        return shouldEditItem;
     }
 
-    private boolean shouldFireSelectEvent(TableCellElement cell) {
-        boolean shouldFireSelectEvent = false;
+    private boolean shouldSelectItem(TableCellElement cell) {
+        boolean shouldSelectItem = false;
 
         if (cell != null) {
             ColumnDefinition<T> columnDefinition =
                     columnDefinitions.get(cell.getCellIndex());
 
             if (columnDefinition != null) {
-                shouldFireSelectEvent = columnDefinition.isSelectable();
+                shouldSelectItem = columnDefinition.isSelectable();
             }
         }
 
-        return shouldFireSelectEvent;
+        return shouldSelectItem;
     }
 
     public Widget asWidget() {

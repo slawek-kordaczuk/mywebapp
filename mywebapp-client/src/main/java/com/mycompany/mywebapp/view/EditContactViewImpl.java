@@ -1,6 +1,5 @@
 package com.mycompany.mywebapp.view;
 
-import com.gargoylesoftware.htmlunit.javascript.host.Console;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -25,12 +24,14 @@ public class EditContactViewImpl<T> extends Composite implements EditContactView
   interface EditContactViewUiBinder extends UiBinder<Widget, EditContactViewImpl> {
   }
 
-  private static EditContactViewUiBinder uiBinder =
+  private static final EditContactViewUiBinder uiBinder =
           GWT.create(EditContactViewUiBinder.class);
 
-  private Presenter<T> presenter;
+  private Presenter<T> activity;
 
   Contact contact;
+
+  private String name;
 
   @UiField
   EditContactEditor contactEditor;
@@ -58,22 +59,26 @@ public class EditContactViewImpl<T> extends Composite implements EditContactView
   @UiHandler("cancelButton")
   void onClickCancel(ClickEvent e) {
     contactEditor.resetValues();
-    presenter.onCancelButtonClicked();
+    activity.onCancelButtonClicked();
   }
 
   @UiHandler("saveButton")
   void onClickSave(ClickEvent e) {
-    Contact flush = driver.flush();
-    logger.log(Level.SEVERE, String.valueOf(flush));
+    Contact contact = driver.flush();
     if (driver.hasErrors()) {
       Window.alert("There are errors!");
     }
-    presenter.onAddButtonClicked(flush);
+    activity.onAddButtonClicked(contact);
   }
 
   @Override
-  public void setPresenter(Presenter<T> presenter) {
-    this.presenter = presenter;
+  public void setActivity(Presenter<T> activity) {
+    this.activity = activity;
+  }
+
+  @Override
+  public void setName(String name) {
+    this.name = name;
   }
 
   public Widget asWidget() {

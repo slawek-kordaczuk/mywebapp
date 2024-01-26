@@ -2,9 +2,16 @@
 <module>
   <inherits name="com.google.gwt.user.User" />
   <inherits name="com.google.gwt.user.theme.clean.Clean" />
-  <inherits name="com.google.gwt.editor.Editor" />
+  <inherits name="com.google.gwt.editor.Editor" />                          -->
+  <inherits name='com.google.gwt.user.theme.standard.Standard'/>                                   -->
+  <inherits name="com.google.gwt.activity.Activity"/>
+  <inherits name="com.google.gwt.place.Place"/>
 
   <source path="" />
+
+  <replace-with class="com.mycompany.mywebapp.ClientFactoryImpl">
+    <when-type-is class="com.mycompany.mywebapp.ClientFactory"/>
+  </replace-with>
 
   <entry-point class="com.mycompany.mywebapp.Contacts" />
 

@@ -12,7 +12,7 @@ import com.mycompany.mywebapp.contracts.Contact;
 
 public class EditContactEditor extends Composite implements Editor<Contact> {
 
-    private static EditContactEditorUiBinder uiBinder = GWT
+    private static final EditContactEditorUiBinder uiBinder = GWT
             .create(EditContactEditorUiBinder.class);
 
     interface EditContactEditorUiBinder extends UiBinder<Widget, EditContactEditor> {

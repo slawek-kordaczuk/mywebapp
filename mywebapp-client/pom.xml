@@ -39,7 +39,7 @@
         <groupId>net.ltgt.gwt.maven</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
         <configuration>
-          <moduleName>com.mycompany.mywebapp.App</moduleName>
+          <moduleName>com.mycompany.mywebapp.Contacts</moduleName>
           <moduleShortName>MyWebApp</moduleShortName>
         </configuration>
       </plugin>
